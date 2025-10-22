@@ -1,11 +1,16 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { MasonryGrid } from "../components/MasonryGrid";
+import React, { useState, useEffect, useCallback, useRef, Suspense } from "react";
+import styled from "styled-components";
+
 import { fetchPhotos } from "../api/pexels";
 import { Photo } from "../types";
-import { InfiniteScroll } from "../components/InfiniteScroll";
-import { SearchInputWrapper, SearchInputField } from "../components/SearchInput";
+import {
+  SearchInputWrapper,
+  SearchInputField,
+} from "../components/SearchInput";
 import { useDebounce } from "../hooks/useDebounce";
-import styled from "styled-components";
+
+const MasonryGrid = React.lazy(() => import("../components/MasonryGrid"));
+const InfiniteScroll = React.lazy(() => import("../components/InfiniteScroll"));
 
 const Header = styled.header`
   position: fixed;
@@ -38,33 +43,30 @@ const EmptyState = styled.div`
 
 const Home = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [search, setSearch] = useState<string>("nature");
+  const [search, setSearch] = useState<string>("");
   const [error, setError] = useState<unknown>();
-  
+
   const pageRef = useRef(1);
   const loadingRef = useRef(false);
-  
+
   const debouncedSearch = useDebounce(search, 1000);
 
-  const loadPhotos = useCallback(
-    async (query: string, reset = false) => {
-      if (loadingRef.current || !query) return;
-      loadingRef.current = true;
+  const loadPhotos = useCallback(async (query: string, reset = false) => {
+    if (loadingRef.current) return;
+    loadingRef.current = true;
 
-      try {
-        const currentPage = reset ? 1 : pageRef.current;
-        const newPhotos = await fetchPhotos(currentPage, query);
+    try {
+      const currentPage = reset ? 1 : pageRef.current;
+      const newPhotos = await fetchPhotos(currentPage, query);
 
-        setPhotos((prev) => (reset ? newPhotos : [...prev, ...newPhotos]));
-        pageRef.current = currentPage + 1;
-      } catch (e) {
-        setError(e)
-      } finally {
-        loadingRef.current = false;
-      }
-    },
-    []
-  );
+      setPhotos((prev) => (reset ? newPhotos : [...prev, ...newPhotos]));
+      pageRef.current = currentPage + 1;
+    } catch (e) {
+      setError(e);
+    } finally {
+      loadingRef.current = false;
+    }
+  }, []);
 
   useEffect(() => {
     pageRef.current = 1;
@@ -75,33 +77,38 @@ const Home = () => {
     setSearch(e.target.value);
   };
 
-  if(error) {
+  if (error) {
     throw error;
   }
 
   return (
     <>
-    <Header>
-      <SearchInputWrapper>
-        <SearchInputField
-          type="text"
-          placeholder="Search photos..."
-          value={search}
-          onChange={handleSearchChange}
-        />
-      </SearchInputWrapper>
-    </Header>
+      <Header>
+        <SearchInputWrapper>
+          <SearchInputField
+            type="text"
+            placeholder="Search photos..."
+            value={search}
+            onChange={handleSearchChange}
+          />
+        </SearchInputWrapper>
+      </Header>
 
-    <Content>
-      {photos.length === 0 && !loadingRef.current ? (
-        <EmptyState>No photos found 👀</EmptyState>
-      ) : (
-        <InfiniteScroll callback={() => loadPhotos(debouncedSearch)} loading={loadingRef.current}>
-          <MasonryGrid photos={photos} />
-        </InfiniteScroll>
-      )}
-    </Content>
-  </>
+      <Content>
+        {photos.length === 0 && !loadingRef.current ? (
+          <EmptyState>No photos found 👀</EmptyState>
+        ) : (
+          <Suspense fallback={<div />}>
+            <InfiniteScroll
+              callback={() => loadPhotos(debouncedSearch)}
+              loading={loadingRef.current}
+            >
+              <MasonryGrid photos={photos} />
+            </InfiniteScroll>
+          </Suspense>
+        )}
+      </Content>
+    </>
   );
 };
 

@@ -1,17 +1,21 @@
+import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import PhotoPage from "./pages/PhotoPage";
 import ErrorBoundary from "./components/ErrorBoundary";
+
+const Home = React.lazy(() => import("./pages/Home"));
+const PhotoPage = React.lazy(() => import("./pages/PhotoPage"));
 
 export const App = () => (
   <Router>
     <ErrorBoundary>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/photo/:id" element={<PhotoPage />} />
-      </Routes>
+      <Suspense fallback={<div />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/photo/:id" element={<PhotoPage />} />
+        </Routes>
+      </Suspense>
     </ErrorBoundary>
   </Router>
 );
 
-export default App
+export default App;

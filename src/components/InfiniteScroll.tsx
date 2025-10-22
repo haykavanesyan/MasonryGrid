@@ -6,7 +6,7 @@ interface Props {
   loading: boolean;
 }
 
-export const InfiniteScroll: React.FC<Props> = ({ children, callback, loading }) => {
+const InfiniteScroll: React.FC<Props> = ({ children, callback, loading }) => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const InfiniteScroll: React.FC<Props> = ({ children, callback, loading })
           callback();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     observer.observe(sentinelRef.current);
@@ -33,3 +33,5 @@ export const InfiniteScroll: React.FC<Props> = ({ children, callback, loading })
     </>
   );
 };
+
+export default InfiniteScroll;

@@ -1,7 +1,10 @@
-import { PhotoCard } from "./PhotoCard";
+import React, { Suspense, memo } from "react";
+import styled from "styled-components";
+
 import { useVirtualizedGrid } from "../hooks/useVirtualizedGrid";
 import { Photo } from "../types";
-import styled from "styled-components";
+
+const PhotoCard = React.lazy(() => import("./PhotoCard"));
 
 const GridWrapper = styled.div`
   display: flex;
@@ -9,7 +12,7 @@ const GridWrapper = styled.div`
   padding: 16px;
 `;
 
-export const MasonryGrid = ({ photos }: { photos: Photo[] }) => {
+const MasonryGrid = memo(({ photos }: { photos: Photo[] }) => {
   const columns = useVirtualizedGrid(photos, 300);
 
   return (
@@ -17,10 +20,14 @@ export const MasonryGrid = ({ photos }: { photos: Photo[] }) => {
       {columns.map((col, i) => (
         <div key={i} style={{ flex: 1 }}>
           {col.map((photo) => (
-            <PhotoCard key={photo.id} photo={photo} />
+            <Suspense fallback={<div />}>
+              <PhotoCard key={photo.id} photo={photo} />
+            </Suspense>
           ))}
         </div>
       ))}
     </GridWrapper>
   );
-};
+});
+
+export default MasonryGrid;

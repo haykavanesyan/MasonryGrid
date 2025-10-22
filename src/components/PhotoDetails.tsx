@@ -52,7 +52,12 @@ export const PhotoDetails = () => {
   const location = useLocation();
   const photo = location.state?.photo as Photo;
 
-  if (!photo) return <Overlay><p style={{ color: "white" }}>Photo not found</p></Overlay>;
+  if (!photo)
+    return (
+      <Overlay>
+        <p style={{ color: "white" }}>Photo not found</p>
+      </Overlay>
+    );
 
   return (
     <Overlay>

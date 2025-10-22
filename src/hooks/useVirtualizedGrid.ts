@@ -3,7 +3,7 @@ import { Photo } from "../types";
 
 export const useVirtualizedGrid = (
   photos: Photo[],
-  columnWidth: number
+  columnWidth: number,
 ): Photo[][] => {
   const [columns, setColumns] = useState<Photo[][]>([]);
 

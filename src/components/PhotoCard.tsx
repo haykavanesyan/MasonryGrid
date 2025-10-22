@@ -1,6 +1,8 @@
+import { memo } from "react";
 import styled from "styled-components";
-import { Photo } from "../types";
 import { Link } from "react-router-dom";
+
+import { Photo } from "../types";
 
 const Card = styled.div`
   margin: 8px;
@@ -11,10 +13,12 @@ const Card = styled.div`
   }
 `;
 
-export const PhotoCard = ({ photo }: { photo: Photo }) => (
+const PhotoCard = memo(({ photo }: { photo: Photo }) => (
   <Card>
     <Link to={`/photo/${photo.id}`} state={{ photo }}>
       <img src={photo.src.medium} alt={photo.alt} />
     </Link>
   </Card>
-);
+));
+
+export default PhotoCard;

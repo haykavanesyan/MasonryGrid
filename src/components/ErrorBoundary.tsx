@@ -38,7 +38,7 @@ export class ErrorBoundary extends Component<Props, State> {
             background: "#f9fafb",
             color: "#1f2937",
             textAlign: "center",
-            padding: '24px 0px'
+            padding: "24px 0px",
           }}
         >
           <h1 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
