@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# 🧱 Masonry Grid App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive **Masonry Grid photo gallery** built with the **Pexels API**, featuring infinite scrolling, search with debounce, and performance optimizations using React hooks and lazy loading.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+- 🖼️ **Masonry Grid Layout** — dynamic responsive layout for photos  
+- 🔍 **Search with Debounce** — optimized input for API calls  
+- ♾️ **Infinite Scroll** — seamless pagination using `IntersectionObserver`  
+- ⚡ **Virtualized Rendering** — efficient rendering with custom `useVirtualizedGrid` hook  
+- 🧠 **Performance Optimizations** — using `React.memo`, `useMemo`, and `useCallback`  
+- 💤 **Lazy Loading & Code Splitting** — reduces initial load time
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🧩 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- ⚛️ [React](https://react.dev/)  
+- 🪄 [TypeScript](https://www.typescriptlang.org/)  
+- 🎨 [styled-components](https://styled-components.com/)  
+- ⚡ [Vite](https://vitejs.dev/)  
+- 📸 [Pexels API](https://www.pexels.com/api/)
 
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Custom Hooks & Components
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+- `useVirtualizedGrid` — calculates and renders responsive columns efficiently  
+- `InfiniteScroll` — triggers data fetching when user nears the bottom of the page  
+- `useDebounce` — prevents redundant API calls during typing  
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+## 🧠 Optimization Techniques
 
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+- `React.memo` for preventing unnecessary re-renders  
+- `useMemo` and `useCallback` for caching expensive computations and callbacks  
+- `React.lazy` and `Suspense` for **code splitting** and **lazy loading**
+
+---
+
+## 🧾 Installation & Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/haykavanesyan/MasonryGrid.git
+
+# Navigate to project directory
+cd MasonryGrid
+
+# Install dependencies
+pnpm install
+
+# Start the development server
+pnpm dev
