@@ -41,6 +41,16 @@ A responsive **Masonry Grid photo gallery** built with the **Pexels API**, featu
 
 ---
 
+## ⚙️ Environment Variables
+
+Before running the project, create a `.env` file in the root directory and add your **Pexels API key**:
+
+```bash
+VITE_PEXELS_API_KEY=YOUR_KEY
+```
+
+---
+
 ## 🧾 Installation & Setup
 
 ```bash
