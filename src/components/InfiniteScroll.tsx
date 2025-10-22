@@ -8,6 +8,12 @@ interface Props {
 
 const InfiniteScroll: React.FC<Props> = ({ children, callback, loading }) => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const callbackRef = useRef(callback);
+  const hasTriggeredRef = useRef(false);
+
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
 
   useEffect(() => {
     if (!sentinelRef.current) return;
@@ -16,15 +22,27 @@ const InfiniteScroll: React.FC<Props> = ({ children, callback, loading }) => {
       (entries) => {
         const first = entries[0];
         if (first.isIntersecting && !loading) {
-          callback();
+          // Skip the first intersection (initial render)
+          if (!hasTriggeredRef.current) {
+            hasTriggeredRef.current = true;
+            return;
+          }
+          callbackRef.current();
         }
       },
       { threshold: 0.1 },
     );
 
-    observer.observe(sentinelRef.current);
-    return () => observer.disconnect();
-  }, [callback, loading]);
+    const currentSentinel = sentinelRef.current;
+    observer.observe(currentSentinel);
+    
+    return () => {
+      if (currentSentinel) {
+        observer.unobserve(currentSentinel);
+      }
+      observer.disconnect();
+    };
+  }, [loading]);
 
   return (
     <>
