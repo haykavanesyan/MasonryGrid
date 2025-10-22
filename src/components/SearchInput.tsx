@@ -5,8 +5,13 @@ export const SearchInputWrapper = styled.div`
   top: 16px;
   display: flex;
   justify-content: flex-end;
-  padding: 0 16px;
+  padding: 18px;
   z-index: 10;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    justify-content: center; /* optional: center it on small screens */
+  }
 `;
 
 export const SearchInputField = styled.input`
@@ -17,7 +22,7 @@ export const SearchInputField = styled.input`
   outline: none;
   font-size: 16px;
   transition: all 0.2s ease;
-  
+
   &:focus {
     border-color: #0077ff;
     box-shadow: 0 0 8px rgba(0, 119, 255, 0.3);
@@ -25,5 +30,9 @@ export const SearchInputField = styled.input`
 
   &::placeholder {
     color: #aaa;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
   }
 `;

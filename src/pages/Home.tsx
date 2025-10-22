@@ -1,50 +1,87 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { MasonryGrid } from "../components/MasonryGrid";
 import { fetchPhotos } from "../api/pexels";
 import { Photo } from "../types";
 import { InfiniteScroll } from "../components/InfiniteScroll";
 import { SearchInputWrapper, SearchInputField } from "../components/SearchInput";
 import { useDebounce } from "../hooks/useDebounce";
+import styled from "styled-components";
+
+const Header = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  justify-content: end;
+`;
+
+const Content = styled.div`
+  padding-top: 40px;
+`;
+
+const EmptyState = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  font-size: 1.5rem;
+  opacity: 0.85;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px 50px;
+  border-radius: 16px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+`;
 
 const Home = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [search, setSearch] = useState("nature");
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-
+  const [search, setSearch] = useState<string>("nature");
+  const [error, setError] = useState<unknown>();
+  
+  const pageRef = useRef(1);
+  const loadingRef = useRef(false);
+  
   const debouncedSearch = useDebounce(search, 1000);
 
   const loadPhotos = useCallback(
     async (query: string, reset = false) => {
-      if (loading) return;
-      setLoading(true);
+      if (loadingRef.current || !query) return;
+      loadingRef.current = true;
 
       try {
-        const currentPage = reset ? 1 : page;
+        const currentPage = reset ? 1 : pageRef.current;
         const newPhotos = await fetchPhotos(currentPage, query);
 
         setPhotos((prev) => (reset ? newPhotos : [...prev, ...newPhotos]));
-        setPage(currentPage + 1);
+        pageRef.current = currentPage + 1;
       } catch (e) {
-        console.error(e);
+        setError(e)
       } finally {
-        setLoading(false);
+        loadingRef.current = false;
       }
     },
-    [page, loading]
+    []
   );
 
   useEffect(() => {
-    setPage(1);
+    pageRef.current = 1;
     loadPhotos(debouncedSearch, true);
-  }, [debouncedSearch]);
+  }, [debouncedSearch, loadPhotos]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
+  if(error) {
+    throw error;
+  }
+
   return (
-    <div>
+    <>
+    <Header>
       <SearchInputWrapper>
         <SearchInputField
           type="text"
@@ -53,14 +90,18 @@ const Home = () => {
           onChange={handleSearchChange}
         />
       </SearchInputWrapper>
+    </Header>
 
-      <InfiniteScroll
-        callback={() => loadPhotos(debouncedSearch)}
-        loading={loading}
-      >
-        <MasonryGrid photos={photos} />
-      </InfiniteScroll>
-    </div>
+    <Content>
+      {photos.length === 0 && !loadingRef.current ? (
+        <EmptyState>No photos found 👀</EmptyState>
+      ) : (
+        <InfiniteScroll callback={() => loadPhotos(debouncedSearch)} loading={loadingRef.current}>
+          <MasonryGrid photos={photos} />
+        </InfiniteScroll>
+      )}
+    </Content>
+  </>
   );
 };
 
