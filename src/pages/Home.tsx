@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef, Suspense } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  Suspense,
+} from "react";
 import styled from "styled-components";
 
 import { fetchPhotos } from "../api/pexels";
@@ -19,11 +25,11 @@ const Header = styled.header`
   width: 100%;
   z-index: 100;
   display: flex;
-  justify-content: end;
+  justify-content: center;
 `;
 
 const Content = styled.div`
-  padding-top: 40px;
+  padding-top: 60px;
 `;
 
 const EmptyState = styled.div`
@@ -41,7 +47,7 @@ const EmptyState = styled.div`
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
 `;
 
-const Home = () => {
+const Home = ({ invisible }: { invisible?: boolean }) => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [search, setSearch] = useState<string>("");
   const [error, setError] = useState<unknown>();
@@ -82,7 +88,7 @@ const Home = () => {
   }
 
   return (
-    <>
+    <div style={{ display: invisible ? "none" : "block" }}>
       <Header>
         <SearchInputWrapper>
           <SearchInputField
@@ -108,7 +114,7 @@ const Home = () => {
           </Suspense>
         )}
       </Content>
-    </>
+    </div>
   );
 };
 

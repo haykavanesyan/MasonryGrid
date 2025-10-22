@@ -15,10 +15,10 @@ export const SearchInputWrapper = styled.div`
 `;
 
 export const SearchInputField = styled.input`
-  width: 250px;
-  padding: 8px 16px;
+  width: 350px;
+  padding: 10px 16px;
   border-radius: 24px;
-  border: 1px solid #ccc;
+  border: 1px solid transparent;
   outline: none;
   font-size: 16px;
   transition: all 0.2s ease;

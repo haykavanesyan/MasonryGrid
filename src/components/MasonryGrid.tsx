@@ -12,19 +12,26 @@ const GridWrapper = styled.div`
   padding: 16px;
 `;
 
+const Colume = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 8px;
+`;
+
 const MasonryGrid = memo(({ photos }: { photos: Photo[] }) => {
-  const columns = useVirtualizedGrid(photos, 300);
+  const columns = useVirtualizedGrid(photos);
 
   return (
     <GridWrapper>
       {columns.map((col, i) => (
-        <div key={i} style={{ flex: 1 }}>
+        <Colume key={i}>
           {col.map((photo) => (
             <Suspense fallback={<div />}>
               <PhotoCard key={photo.id} photo={photo} />
             </Suspense>
           ))}
-        </div>
+        </Colume>
       ))}
     </GridWrapper>
   );

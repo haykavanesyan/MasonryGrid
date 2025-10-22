@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { Photo } from "../types";
 
 const Card = styled.div`
-  margin: 8px;
   img {
     width: 100%;
     display: block;

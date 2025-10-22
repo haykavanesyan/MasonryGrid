@@ -35,7 +35,7 @@ const InfiniteScroll: React.FC<Props> = ({ children, callback, loading }) => {
 
     const currentSentinel = sentinelRef.current;
     observer.observe(currentSentinel);
-    
+
     return () => {
       if (currentSentinel) {
         observer.unobserve(currentSentinel);

@@ -11,7 +11,15 @@ export const App = () => (
       <Suspense fallback={<div />}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/photo/:id" element={<PhotoPage />} />
+          <Route
+            path="/photo/:id"
+            element={
+              <>
+                <Home invisible />
+                <PhotoPage />
+              </>
+            }
+          />
         </Routes>
       </Suspense>
     </ErrorBoundary>
