@@ -18,7 +18,7 @@ A responsive **Masonry Grid photo gallery** built with the **Pexels API**, featu
 ## 🧩 Tech Stack
 
 - ⚛️ [React](https://react.dev/)  
-- 🪄 [TypeScript](https://www.typescriptlang.org/)  
+- 🔷 [TypeScript](https://www.typescriptlang.org/)  
 - 🎨 [styled-components](https://styled-components.com/)  
 - ⚡ [Vite](https://vitejs.dev/)  
 - 📸 [Pexels API](https://www.pexels.com/api/)
