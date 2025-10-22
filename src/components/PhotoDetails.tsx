@@ -1,6 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { Photo } from "../types";
+import { useState } from "react";
+import { Loader } from "./Loader";
 
 const Overlay = styled.div`
   position: fixed;
@@ -57,9 +59,15 @@ const Photographer = styled.p`
 `
 
 export const PhotoDetails = () => {
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
   const location = useLocation();
   const photo = location.state?.photo as Photo;
+
+  const imageLoaded = () => {
+      setLoading(false);
+  }
 
   if (!photo)
     return (
@@ -72,8 +80,9 @@ export const PhotoDetails = () => {
     <Overlay>
       <Container>
         <BackButton onClick={() => navigate(-1)}>← Back</BackButton>
-        <h2>{photo.alt}</h2>
-        <Image src={photo.src.large2x} alt={photo.alt} />
+        <h2>{photo.alt || 'Untitled'}</h2>
+        <Image src={photo.src.large2x} alt={photo.alt} onLoad={imageLoaded} />
+        {loading && <Loader />}
         <Photographer>
           Photographer: {photo.photographer}
         </Photographer>
