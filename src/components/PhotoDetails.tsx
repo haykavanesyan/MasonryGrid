@@ -47,6 +47,15 @@ const BackButton = styled.button`
   }
 `;
 
+const NotFoundText = styled.p`
+  color: white;
+`
+
+const Photographer = styled.p`
+  margin-top: 12px;
+  color: #ccc;
+`
+
 export const PhotoDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -55,7 +64,7 @@ export const PhotoDetails = () => {
   if (!photo)
     return (
       <Overlay>
-        <p style={{ color: "white" }}>Photo not found</p>
+        <NotFoundText>Photo not found</NotFoundText>
       </Overlay>
     );
 
@@ -65,9 +74,9 @@ export const PhotoDetails = () => {
         <BackButton onClick={() => navigate(-1)}>← Back</BackButton>
         <h2>{photo.alt}</h2>
         <Image src={photo.src.large2x} alt={photo.alt} />
-        <p style={{ marginTop: "12px", color: "#ccc" }}>
+        <Photographer>
           Photographer: {photo.photographer}
-        </p>
+        </Photographer>
       </Container>
     </Overlay>
   );
