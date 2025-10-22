@@ -101,7 +101,7 @@ const Home = ({ invisible }: { invisible?: boolean }) => {
       </Header>
 
       <Content>
-        {photos.length === 0 && !loadingRef.current ? (
+        {photos.length === 0 && !loadingRef.current && debouncedSearch ? (
           <EmptyState>No photos found 👀</EmptyState>
         ) : (
           <Suspense fallback={<div />}>
