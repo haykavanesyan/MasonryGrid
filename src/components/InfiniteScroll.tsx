@@ -1,13 +1,35 @@
-import { useEffect } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
-export const InfiniteScroll = (callback: () => void) => {
+interface Props {
+  children: ReactNode;
+  callback: () => void;
+  loading: boolean;
+}
+
+export const InfiniteScroll: React.FC<Props> = ({ children, callback, loading }) => {
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
-        callback();
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [callback]);
+    if (!sentinelRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting && !loading) {
+          callback();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [callback, loading]);
+
+  return (
+    <>
+      {children}
+      <div ref={sentinelRef} style={{ height: 1 }} />
+    </>
+  );
 };
