@@ -14,6 +14,7 @@ import {
   SearchInputField,
 } from "../components/SearchInput";
 import { useDebounce } from "../hooks/useDebounce";
+import { Loader } from "../components/Loader";
 
 const MasonryGrid = React.lazy(() => import("../components/MasonryGrid"));
 const InfiniteScroll = React.lazy(() => import("../components/InfiniteScroll"));
@@ -51,6 +52,7 @@ const Home = ({ invisible }: { invisible?: boolean }) => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [search, setSearch] = useState<string>("");
   const [error, setError] = useState<unknown>();
+  const [searchLoading, setSearchLoading] = useState<boolean>(false)
 
   const pageRef = useRef(1);
   const loadingRef = useRef(false);
@@ -71,6 +73,7 @@ const Home = ({ invisible }: { invisible?: boolean }) => {
       setError(e);
     } finally {
       loadingRef.current = false;
+      setSearchLoading(false)
     }
   }, []);
 
@@ -81,6 +84,7 @@ const Home = ({ invisible }: { invisible?: boolean }) => {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
+    setSearchLoading(true)
   };
 
   if (error) {
@@ -97,6 +101,7 @@ const Home = ({ invisible }: { invisible?: boolean }) => {
             value={search}
             onChange={handleSearchChange}
           />
+          {searchLoading && <Loader size="small" />}
         </SearchInputWrapper>
       </Header>
 

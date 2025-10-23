@@ -5,6 +5,7 @@ export const SearchInputWrapper = styled.div`
   top: 16px;
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
   padding: 18px;
   z-index: 10;
 

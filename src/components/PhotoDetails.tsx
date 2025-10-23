@@ -82,7 +82,7 @@ export const PhotoDetails = () => {
         <BackButton onClick={() => navigate(-1)}>← Back</BackButton>
         <h2>{photo.alt || 'Untitled'}</h2>
         <Image src={photo.src.large2x} alt={photo.alt} onLoad={imageLoaded} />
-        {loading && <Loader />}
+        {loading && <Loader size="big" />}
         <Photographer>
           Photographer: {photo.photographer}
         </Photographer>
